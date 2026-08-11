@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as CatalogRouteImport } from './routes/catalog'
+import { Route as ColourCosmeticsRouteImport } from './routes/colour-cosmetics'
 import { Route as IndustriesRouteImport } from './routes/industries'
 import { Route as PackagingRouteImport } from './routes/packaging'
 import { Route as ProductsIndexRouteImport } from './routes/products.index'
@@ -30,6 +31,11 @@ const AboutRoute = AboutRouteImport.update({
 const CatalogRoute = CatalogRouteImport.update({
   id: '/catalog',
   path: '/catalog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ColourCosmeticsRoute = ColourCosmeticsRouteImport.update({
+  id: '/colour-cosmetics',
+  path: '/colour-cosmetics',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndustriesRoute = IndustriesRouteImport.update({
@@ -57,6 +63,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/catalog': typeof CatalogRoute
+  '/colour-cosmetics': typeof ColourCosmeticsRoute
   '/industries': typeof IndustriesRoute
   '/packaging': typeof PackagingRoute
   '/products/$slug': typeof ProductsSlugRoute
@@ -66,6 +73,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/catalog': typeof CatalogRoute
+  '/colour-cosmetics': typeof ColourCosmeticsRoute
   '/industries': typeof IndustriesRoute
   '/packaging': typeof PackagingRoute
   '/products/$slug': typeof ProductsSlugRoute
@@ -76,6 +84,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/catalog': typeof CatalogRoute
+  '/colour-cosmetics': typeof ColourCosmeticsRoute
   '/industries': typeof IndustriesRoute
   '/packaging': typeof PackagingRoute
   '/products/$slug': typeof ProductsSlugRoute
@@ -87,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/catalog'
+    | '/colour-cosmetics'
     | '/industries'
     | '/packaging'
     | '/products/$slug'
@@ -96,6 +106,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/catalog'
+    | '/colour-cosmetics'
     | '/industries'
     | '/packaging'
     | '/products/$slug'
@@ -105,6 +116,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/catalog'
+    | '/colour-cosmetics'
     | '/industries'
     | '/packaging'
     | '/products/$slug'
@@ -115,6 +127,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   CatalogRoute: typeof CatalogRoute
+  ColourCosmeticsRoute: typeof ColourCosmeticsRoute
   IndustriesRoute: typeof IndustriesRoute
   PackagingRoute: typeof PackagingRoute
   ProductsSlugRoute: typeof ProductsSlugRoute
@@ -142,6 +155,13 @@ declare module '@tanstack/react-router' {
       path: '/catalog'
       fullPath: '/catalog'
       preLoaderRoute: typeof CatalogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/colour-cosmetics': {
+      id: '/colour-cosmetics'
+      path: '/colour-cosmetics'
+      fullPath: '/colour-cosmetics'
+      preLoaderRoute: typeof ColourCosmeticsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/industries': {
@@ -179,6 +199,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   CatalogRoute: CatalogRoute,
+  ColourCosmeticsRoute: ColourCosmeticsRoute,
   IndustriesRoute: IndustriesRoute,
   PackagingRoute: PackagingRoute,
   ProductsSlugRoute: ProductsSlugRoute,
