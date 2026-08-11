@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { PageHero, SiteLayout } from "@/components/layout/SiteLayout";
 import { PRODUCTS, PRODUCT_CATEGORIES } from "@/data/products";
 
-export const Route = createFileRoute("/products")({
+export const Route = createFileRoute("/products/")({
   head: () => ({
     meta: [
       { title: "Products — Amoha Herbals Private Label Range" },
