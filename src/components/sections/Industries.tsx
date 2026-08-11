@@ -11,8 +11,9 @@ export function Industries() {
 
   const count = INDUSTRIES.length;
   const auto = Math.round(progress * (count - 0.001) * 1) % count;
-  const activeId = hovered ?? INDUSTRIES[auto]?.id ?? INDUSTRIES[0].id;
-  const active = INDUSTRIES.find((i) => i.id === activeId) ?? INDUSTRIES[0];
+  const fallback = INDUSTRIES[0] as (typeof INDUSTRIES)[number];
+  const activeId = hovered ?? INDUSTRIES[auto]?.id ?? fallback.id;
+  const active = INDUSTRIES.find((i) => i.id === activeId) ?? fallback;
 
   return (
     <section ref={ref} id="industries" className="relative bg-background py-24 lg:py-36">
