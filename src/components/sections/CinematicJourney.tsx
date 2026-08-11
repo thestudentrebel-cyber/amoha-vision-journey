@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { CinematicVideo } from "@/components/ui/CinematicVideo";
+import { useSectionProgress } from "@/hooks/useCinematicScroll";
 import { ScrollIndicator } from "@/components/ui/ScrollIndicator";
 import { ButtonLink } from "@/components/ui/CineButton";
 import { CINEMATIC_CLIPS, HERO_POSTER } from "@/data/videos";
@@ -75,12 +76,10 @@ const beatOpacity = (p: number, [a, b]: [number, number]) => {
 };
 
 export function CinematicJourney({
-  progress,
   pointer,
   isMobile,
   reducedMotion,
 }: {
-  progress: number;
   pointer: { x: number; y: number };
   isMobile: boolean;
   reducedMotion: boolean;
@@ -88,6 +87,8 @@ export function CinematicJourney({
   const [webgl, setWebgl] = useState(true);
   const [mounted, setMounted] = useState(false);
   const stageRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const progress = useSectionProgress(sectionRef);
 
   useEffect(() => {
     setMounted(true);
@@ -102,7 +103,7 @@ export function CinematicJourney({
   const heroOpacity = 1 - Math.min(1, progress / 0.12);
 
   return (
-    <section aria-label="Amoha Herbals cinematic journey" className="relative">
+    <section ref={sectionRef} aria-label="Amoha Herbals cinematic journey" className="relative">
       {/* Fixed cinematic stage */}
       <div ref={stageRef} className="sticky top-0 h-screen w-full overflow-hidden bg-charcoal film-grain">
         <div
