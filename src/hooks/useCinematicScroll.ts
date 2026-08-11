@@ -57,3 +57,26 @@ export function useCinematicScroll() {
 /** Maps global progress into a local 0..1 range. */
 export const rangeProgress = (p: number, start: number, end: number) =>
   Math.min(1, Math.max(0, (p - start) / (end - start)));
+
+/** Progress of a tall sticky section: 0 when its top hits the viewport top, 1 at its end. */
+export function useSectionProgress(ref: { current: HTMLElement | null }) {
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    let frame = 0;
+    const update = () => {
+      const el = ref.current;
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        const total = rect.height - window.innerHeight;
+        const p = total > 0 ? Math.min(1, Math.max(0, -rect.top / total)) : 0;
+        setProgress((prev) => (Math.abs(prev - p) > 0.0005 ? p : prev));
+      }
+      frame = requestAnimationFrame(update);
+    };
+    frame = requestAnimationFrame(update);
+    return () => cancelAnimationFrame(frame);
+  }, [ref]);
+
+  return progress;
+}
