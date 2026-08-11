@@ -132,17 +132,17 @@ export function CinematicJourney({
 
         {/* Hero copy */}
         <div
-          className="absolute inset-0 flex flex-col items-center justify-center px-5 text-center cine-fade"
+          className="absolute inset-0 flex flex-col items-center justify-center px-5 text-center cine-fade lg:items-start lg:px-20 lg:text-left"
           style={{ opacity: heroOpacity, pointerEvents: heroOpacity < 0.2 ? "none" : "auto" }}
         >
           <img src={logo.url} alt="Amoha Herbals Pvt Ltd" className="h-12 w-auto brightness-0 invert lg:h-14" />
-          <h1 className="display mt-10 text-5xl text-onDark sm:text-6xl lg:text-8xl">
+          <h1 className="display mt-10 text-5xl text-onDark sm:text-6xl lg:max-w-2xl lg:text-8xl">
             Crafting products.
             <br />
             Building brands.
           </h1>
           <p className="mt-8 max-w-xl text-sm leading-relaxed text-onDark/75 sm:text-base">{COMPANY.positioning}</p>
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
             <ButtonLink to="/contact" variant="onFilm">
               Start your brand
             </ButtonLink>
