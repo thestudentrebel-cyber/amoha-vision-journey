@@ -37,8 +37,8 @@ export function Industries() {
             >
               {INDUSTRIES.map((industry, i) => {
                 const angle = (i / count) * Math.PI * 2;
-                const x = 50 + Math.cos(angle) * 42;
-                const y = 50 + Math.sin(angle) * 42;
+                const x = (50 + Math.cos(angle) * 42).toFixed(3);
+                const y = (50 + Math.sin(angle) * 42).toFixed(3);
                 const isActive = industry.id === activeId;
                 return (
                   <li
