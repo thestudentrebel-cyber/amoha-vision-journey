@@ -3,6 +3,8 @@ import { useState, type FormEvent } from "react";
 import { PageHero, SiteLayout } from "@/components/layout/SiteLayout";
 import { Button } from "@/components/ui/CineButton";
 import { INDUSTRIES } from "@/data/industries";
+import { COMPANY } from "@/data/navigation";
+
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -48,9 +50,49 @@ function ContactPage() {
       <PageHero
         eyebrow="Contact Us"
         title="Let's build your brand."
-        intro="Share your category and requirement. Verified phone, email and address details will be published once supplied by Amoha Herbals."
+        intro="Share your category and requirement — or reach us directly on phone or email."
       />
+      <section className="mx-auto max-w-[1400px] px-5 pb-16 lg:px-10">
+        <div className="grid gap-px border border-border bg-border md:grid-cols-3">
+          <div className="bg-background p-8">
+            <p className="eyebrow text-muted-foreground">Address</p>
+            <address className="mt-4 not-italic text-sm leading-relaxed text-foreground">
+              {COMPANY.address.map((line) => (
+                <span key={line} className="block">
+                  {line}
+                </span>
+              ))}
+            </address>
+          </div>
+          <div className="bg-background p-8">
+            <p className="eyebrow text-muted-foreground">Get in touch</p>
+            <p className="mt-4 text-sm text-foreground">
+              <a href={COMPANY.phoneHref} className="hover:text-accent">
+                {COMPANY.phone}
+              </a>
+            </p>
+            <p className="mt-2 text-sm text-foreground">
+              <a href={COMPANY.emailHref} className="hover:text-accent">
+                {COMPANY.email}
+              </a>
+            </p>
+          </div>
+          <div className="bg-background p-8">
+            <p className="eyebrow text-muted-foreground">Follow us</p>
+            <ul className="mt-4 space-y-2 text-sm text-foreground">
+              {COMPANY.social.map((s) => (
+                <li key={s.label}>
+                  <a href={s.href} target="_blank" rel="noreferrer noopener" className="hover:text-accent">
+                    {s.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
       <section className="mx-auto max-w-[1400px] px-5 pb-28 lg:px-10">
+
         {submitted ? (
           <div className="border border-border p-12">
             <h2 className="display text-3xl">Thank you.</h2>
