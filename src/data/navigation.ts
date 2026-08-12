@@ -17,4 +17,13 @@ export const COMPANY = {
   short: "Amoha Herbals",
   positioning:
     "Premium private label and contract manufacturing solutions for Ayurvedic, cosmetic, colour cosmetic, food and home-care products.",
+  address: ["Yashashree Colony, Karve Nagar,", "Pune 411052, Maharashtra, India"],
+  phone: "+91 8308832043",
+  phoneHref: "tel:+918308832043",
+  email: "amohaherbals@gmail.com",
+  emailHref: "mailto:amohaherbals@gmail.com",
+  social: [
+    { label: "Facebook", href: "https://www.facebook.com/" },
+    { label: "Instagram", href: "https://www.instagram.com/" },
+  ],
 };
