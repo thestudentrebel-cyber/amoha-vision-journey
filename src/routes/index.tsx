@@ -53,10 +53,13 @@ function Home() {
       <Navigation scrolled={globalProgress > 0.12} />
       <main>
         <CinematicJourney pointer={pointer} isMobile={isMobile} reducedMotion={reducedMotion} />
+        <LaunchYourBrand />
         <Industries />
         <ProductUniverse />
         <PrivateLabel />
+        <CoreAreas />
         <WhyAmoha />
+
         <section className="bg-background py-24 lg:py-36">
           <div className="mx-auto max-w-[1400px] px-5 text-center lg:px-10">
             <SectionHeading
