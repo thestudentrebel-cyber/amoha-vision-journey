@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { CinematicVideo } from "@/components/ui/CinematicVideo";
 import { useSectionProgress } from "@/hooks/useCinematicScroll";
 import { ScrollIndicator } from "@/components/ui/ScrollIndicator";
@@ -7,8 +7,6 @@ import { CINEMATIC_CLIPS, HERO_POSTER } from "@/data/videos";
 import { COMPANY } from "@/data/navigation";
 import { JOURNEY } from "@/data/industries";
 import logo from "@/assets/amoha-logo.png.asset.json";
-
-const HeroScene = lazy(() => import("@/components/3d/HeroScene"));
 
 type Beat = {
   id: string;
@@ -22,7 +20,7 @@ type Beat = {
 const BEATS: Beat[] = [
   {
     id: "product-reveal",
-    range: [0.2, 0.34],
+    range: [0.2, 0.33],
     eyebrow: "The Product",
     title: "Built around\nyour brand.",
     body: "Every programme begins with a product brief and ends with a finished, branded product.",
@@ -30,7 +28,7 @@ const BEATS: Beat[] = [
   },
   {
     id: "nature",
-    range: [0.38, 0.55],
+    range: [0.39, 0.52],
     eyebrow: "Nature",
     title: "From nature\nto formulation.",
     body: "Botanical inputs move into a controlled formulation and development process.",
@@ -38,7 +36,7 @@ const BEATS: Beat[] = [
   },
   {
     id: "formulation",
-    range: [0.55, 0.65],
+    range: [0.57, 0.66],
     eyebrow: "Formulation",
     title: "Concept.\nFormulation.\nDevelopment.",
     body: "Product concepts are developed into workable formulations for your category.",
@@ -46,7 +44,7 @@ const BEATS: Beat[] = [
   },
   {
     id: "manufacturing",
-    range: [0.65, 0.75],
+    range: [0.7, 0.79],
     eyebrow: "Manufacturing",
     title: "Contract\nmanufacturing.",
     body: "Production is carried out under Amoha's contract manufacturing arrangements.",
@@ -54,7 +52,7 @@ const BEATS: Beat[] = [
   },
   {
     id: "packaging",
-    range: [0.76, 0.88],
+    range: [0.83, 0.9],
     eyebrow: "Packaging",
     title: "Your idea.\nOur expertise.",
     body: "Packaging and finishing complete the product's shelf identity.",
@@ -62,7 +60,7 @@ const BEATS: Beat[] = [
   },
   {
     id: "cta",
-    range: [0.9, 1.01],
+    range: [0.94, 1.01],
     eyebrow: "Let's begin",
     title: "Ready to build\nyour brand?",
     align: "center",
@@ -70,7 +68,7 @@ const BEATS: Beat[] = [
 ];
 
 const beatOpacity = (p: number, [a, b]: [number, number]) => {
-  const f = 0.04;
+  const f = 0.03;
   if (p < a - f || p > b + f) return 0;
   return Math.min(1, Math.max(0, (p - (a - f)) / f), Math.max(0, (b + f - p) / f));
 };
@@ -84,28 +82,15 @@ export function CinematicJourney({
   isMobile: boolean;
   reducedMotion: boolean;
 }) {
-  const [webgl, setWebgl] = useState(true);
-  const [mounted, setMounted] = useState(false);
-  const stageRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const progress = useSectionProgress(sectionRef);
 
-  useEffect(() => {
-    setMounted(true);
-    try {
-      const canvas = document.createElement("canvas");
-      setWebgl(Boolean(canvas.getContext("webgl2") ?? canvas.getContext("webgl")));
-    } catch {
-      setWebgl(false);
-    }
-  }, []);
-
-  const heroOpacity = 1 - Math.min(1, progress / 0.12);
+  const drift = isMobile || reducedMotion ? { x: 0, y: 0 } : { x: pointer.x * 8, y: pointer.y * 6 };
+  const heroOpacity = 1 - Math.min(1, progress / 0.1);
 
   return (
     <section ref={sectionRef} aria-label="Amoha Herbals cinematic journey" className="relative">
-      {/* Fixed cinematic stage */}
-      <div ref={stageRef} className="sticky top-0 h-screen w-full overflow-hidden bg-charcoal film-grain">
+      <div className="sticky top-0 h-screen w-full overflow-hidden bg-charcoal film-grain">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${HERO_POSTER})` }}
@@ -115,34 +100,33 @@ export function CinematicJourney({
           <CinematicVideo key={clip.id} clip={clip} progress={progress} priority={i === 0} />
         ))}
 
-        <div className="absolute inset-0 bg-charcoal/45" aria-hidden="true" />
+        <div className="absolute inset-0 bg-charcoal/55" aria-hidden="true" />
         <div
           className="absolute inset-0"
           aria-hidden="true"
-          style={{ background: "radial-gradient(120% 80% at 50% 40%, transparent 40%, oklch(0.18 0.008 60 / 0.75))" }}
+          style={{
+            background:
+              "linear-gradient(90deg, oklch(0.18 0.008 60 / 0.7) 0%, oklch(0.18 0.008 60 / 0.35) 55%, transparent 100%)",
+          }}
         />
-
-        {mounted && webgl && !isMobile ? (
-          <div className="pointer-events-none absolute inset-0">
-            <Suspense fallback={null}>
-              <HeroScene progress={progress} pointer={pointer} isMobile={isMobile} reducedMotion={reducedMotion} />
-            </Suspense>
-          </div>
-        ) : null}
 
         {/* Hero copy */}
         <div
-          className="absolute inset-0 flex flex-col items-center justify-center px-5 text-center cine-fade lg:items-start lg:px-20 lg:text-left"
-          style={{ opacity: heroOpacity, pointerEvents: heroOpacity < 0.2 ? "none" : "auto" }}
+          className="absolute inset-0 flex flex-col items-center justify-center px-5 pb-28 pt-24 text-center cine-fade lg:items-start lg:px-20 lg:text-left"
+          style={{
+            opacity: heroOpacity,
+            pointerEvents: heroOpacity < 0.2 ? "none" : "auto",
+            transform: `translate3d(${drift.x}px, ${drift.y}px, 0)`,
+          }}
         >
-          <img src={logo.url} alt="Amoha Herbals Pvt Ltd" className="h-12 w-auto brightness-0 invert lg:h-14" />
-          <h1 className="display mt-10 text-5xl text-onDark sm:text-6xl lg:max-w-2xl lg:text-8xl">
+          <img src={logo.url} alt="Amoha Herbals Pvt Ltd" className="h-10 w-auto brightness-0 invert lg:h-14" />
+          <h1 className="display mt-8 text-4xl leading-[1.05] text-onDark sm:text-6xl lg:max-w-3xl lg:text-8xl">
             Crafting products.
             <br />
             Building brands.
           </h1>
-          <p className="mt-8 max-w-xl text-sm leading-relaxed text-onDark/75 sm:text-base">{COMPANY.positioning}</p>
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
+          <p className="mt-6 max-w-xl text-sm leading-relaxed text-onDark/80 sm:text-base">{COMPANY.positioning}</p>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
             <ButtonLink to="/contact" variant="onFilm">
               Start your brand
             </ButtonLink>
@@ -150,9 +134,13 @@ export function CinematicJourney({
               Explore products
             </ButtonLink>
           </div>
-          <div className="absolute bottom-10">
-            <ScrollIndicator />
-          </div>
+        </div>
+
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-6 flex justify-center cine-fade lg:hidden"
+          style={{ opacity: heroOpacity }}
+        >
+          <ScrollIndicator />
         </div>
 
         {/* Scroll beats */}
@@ -161,22 +149,26 @@ export function CinematicJourney({
           return (
             <div
               key={beat.id}
-              className={`absolute inset-0 flex items-center px-6 cine-fade lg:px-20 ${
+              className={`absolute inset-0 flex items-center px-6 pb-28 pt-24 cine-fade lg:px-20 ${
                 beat.align === "center" ? "justify-center text-center" : "justify-start"
               }`}
-              style={{ opacity: o, pointerEvents: o > 0.5 ? "auto" : "none" }}
+              style={{
+                opacity: o,
+                pointerEvents: o > 0.5 ? "auto" : "none",
+                transform: `translate3d(${drift.x}px, ${drift.y}px, 0)`,
+              }}
               aria-hidden={o < 0.5}
             >
               <div className="max-w-xl">
                 {beat.eyebrow ? <p className="eyebrow text-onDark/70">{beat.eyebrow}</p> : null}
-                <h2 className="display mt-6 whitespace-pre-line text-4xl text-onDark sm:text-6xl lg:text-7xl">
+                <h2 className="display mt-5 whitespace-pre-line text-3xl leading-[1.05] text-onDark sm:text-5xl lg:text-7xl">
                   {beat.title}
                 </h2>
                 {beat.body ? (
-                  <p className="mt-6 max-w-md text-sm leading-relaxed text-onDark/75">{beat.body}</p>
+                  <p className="mt-5 max-w-md text-sm leading-relaxed text-onDark/80">{beat.body}</p>
                 ) : null}
                 {beat.id === "cta" ? (
-                  <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+                  <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
                     <ButtonLink to="/contact" variant="onFilm">
                       Start your project
                     </ButtonLink>
@@ -191,7 +183,7 @@ export function CinematicJourney({
         })}
 
         {/* Journey progress rail */}
-        <div className="absolute bottom-8 left-1/2 hidden w-[60vw] -translate-x-1/2 lg:block" aria-hidden="true">
+        <div className="pointer-events-none absolute bottom-6 left-1/2 hidden w-[60vw] -translate-x-1/2 lg:block" aria-hidden="true">
           <div className="h-px w-full bg-onDark/20">
             <div className="h-px bg-onDark/70" style={{ width: `${progress * 100}%` }} />
           </div>
@@ -203,7 +195,6 @@ export function CinematicJourney({
         </div>
       </div>
 
-      {/* Scroll length driving the timeline */}
       <div className="h-[700vh]" aria-hidden="true" />
     </section>
   );
