@@ -77,14 +77,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Amoha Herbals — Private Label & Contract Manufacturing" },
+      {
+        name: "description",
+        content:
+          "Amoha Herbals Pvt Ltd: private label and contract manufacturing for Ayurvedic, cosmetic, colour cosmetic, food and home-care products.",
+      },
+      { name: "author", content: "Amoha Herbals Pvt Ltd" },
+      { property: "og:site_name", content: "Amoha Herbals" },
+      { property: "og:title", content: "Amoha Herbals — Private Label & Contract Manufacturing" },
+      {
+        property: "og:description",
+        content:
+          "End-to-end private label and contract manufacturing for Ayurvedic, cosmetic, colour cosmetic, food and home-care brands.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {
@@ -93,7 +101,44 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebSite",
+              "@id": "https://amohaherbals.lovable.app/#website",
+              url: "https://amohaherbals.lovable.app",
+              name: "Amoha Herbals",
+              publisher: { "@id": "https://amohaherbals.lovable.app/#organization" },
+            },
+            {
+              "@type": "Organization",
+              "@id": "https://amohaherbals.lovable.app/#organization",
+              name: "Amoha Herbals Pvt Ltd",
+              url: "https://amohaherbals.lovable.app",
+              description:
+                "Private label and contract manufacturing for Ayurvedic, cosmetic, colour cosmetic, food and home-care products.",
+              telephone: "+91 8308832043",
+              email: "amohaherbals@gmail.com",
+              address: {
+                "@type": "PostalAddress",
+                streetAddress: "Yashashree Colony, Karve Nagar",
+                addressLocality: "Pune",
+                postalCode: "411052",
+                addressRegion: "Maharashtra",
+                addressCountry: "IN",
+              },
+              sameAs: ["https://www.facebook.com/", "https://www.instagram.com/"],
+            },
+          ],
+        }),
+      },
+    ],
   }),
+
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,

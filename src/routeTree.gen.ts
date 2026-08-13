@@ -17,6 +17,7 @@ import { Route as ColourCosmeticsRouteImport } from './routes/colour-cosmetics'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as IndustriesRouteImport } from './routes/industries'
 import { Route as PackagingRouteImport } from './routes/packaging'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ProductsIndexRouteImport } from './routes/products.index'
 import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
 
@@ -60,6 +61,11 @@ const PackagingRoute = PackagingRouteImport.update({
   path: '/packaging',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProductsIndexRoute = ProductsIndexRouteImport.update({
   id: '/products/',
   path: '/products/',
@@ -80,6 +86,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/industries': typeof IndustriesRoute
   '/packaging': typeof PackagingRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/products/': typeof ProductsIndexRoute
 }
@@ -92,6 +99,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/industries': typeof IndustriesRoute
   '/packaging': typeof PackagingRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/products': typeof ProductsIndexRoute
 }
@@ -105,6 +113,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/industries': typeof IndustriesRoute
   '/packaging': typeof PackagingRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/products/': typeof ProductsIndexRoute
 }
@@ -119,6 +128,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/industries'
     | '/packaging'
+    | '/sitemap.xml'
     | '/products/$slug'
     | '/products/'
   fileRoutesByTo: FileRoutesByTo
@@ -131,6 +141,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/industries'
     | '/packaging'
+    | '/sitemap.xml'
     | '/products/$slug'
     | '/products'
   id:
@@ -143,6 +154,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/industries'
     | '/packaging'
+    | '/sitemap.xml'
     | '/products/$slug'
     | '/products/'
   fileRoutesById: FileRoutesById
@@ -156,6 +168,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   IndustriesRoute: typeof IndustriesRoute
   PackagingRoute: typeof PackagingRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ProductsSlugRoute: typeof ProductsSlugRoute
   ProductsIndexRoute: typeof ProductsIndexRoute
 }
@@ -218,6 +231,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PackagingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/products/': {
       id: '/products/'
       path: '/products'
@@ -244,9 +264,20 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   IndustriesRoute: IndustriesRoute,
   PackagingRoute: PackagingRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   ProductsSlugRoute: ProductsSlugRoute,
   ProductsIndexRoute: ProductsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
